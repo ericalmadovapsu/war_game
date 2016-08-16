@@ -32,14 +32,7 @@ class Player
         topCard = @hand.shift
         return topCard
     end
-
-    # Add card back to the top of player's deck
-    # Params:
-    #   card - card to be rolled back
-    def rollbackCard(card)
-        @hand.unshift(card)
-    end
-
+    
     # Adds a card to the end of the players hand
     # Params:
     #   card - card to be added

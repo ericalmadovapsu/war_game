@@ -246,33 +246,6 @@ class Game
         return largest
     end
     
-    # Rollback cards played if a player loses in the middle of a round or war
-    def rollback(cards)
-        @players.each do |player|
-            cards.each do |card|
-                if card.getLastPlayedBy.eql?(player.name())
-                    player.rollbackCard(card)
-                end
-            end
-        end
-    end
-   
-    # Rollback cards from the winlist that were in play
-    def rollbackWinList(winList, cardsInPlay)
-        cardsInPlay.each do |card|
-            winList.each do |spoil|
-                if card == spoil
-                    winList.delete(spoil)
-                    next
-                end
-            end
-        end
-        return winList
-    end
-
-    def rollbackBurnCards()
-    end
-
     # This method is used for testing purposes
     def numOfPlayers()
         return @numPlayers
