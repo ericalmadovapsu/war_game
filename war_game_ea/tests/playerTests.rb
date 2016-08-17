@@ -27,4 +27,31 @@ class PlayerTest
             puts "  FAILED - len test"
         end
     end
+
+    def testPlayCard()
+        puts "TEST: Play Card"
+        person = Player.new("Player1")
+        result = person.playCard()
+        if result == false
+            puts "  PASSED"
+        else
+            puts "  FAILED - play card test"
+        end
+
+        cards = self.initCards(5)
+        person.addCardsToHand(cards)
+        result = person.playCard()
+        len = person.handLength()
+        if len == 4
+            puts "  PASSED"
+        else
+            puts "  FAILED"
+        end
+
+        if result != false
+            puts "  PASSED"
+        else
+            puts "  FAILED"
+        end
+    end
 end

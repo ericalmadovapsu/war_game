@@ -13,6 +13,7 @@ puts
 puts "Starting tests for the Game of War!"
 playertests = PlayerTest.new()
 playertests.testAddCardsToHand()
+playertests.testPlayCard()
 puts
 gametests = GameTest.new()
 gametests.testRemovePlayer()
