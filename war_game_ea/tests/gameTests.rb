@@ -48,6 +48,8 @@ class GameTest
         players.each do |player|
             size = (52/playerCount).floor
             # 3 player games give out hands of 17, 17 & 18 currently
+            # I believe this is okay. Deciding what card to get rid of
+            # can hurt the game.
             if (playerCount == 3 && player.handLength() == 18)
                 next
             end

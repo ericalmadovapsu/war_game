@@ -95,7 +95,8 @@ class Game
         # Pass them their winnings
         puts "TOTAL AMOUNT OF CARDS WON AFTER ROUND: #{cardsForWinner.length}"
         winner.addCardsToHand(cardsForWinner)
-
+        
+        puts "SCOREBOARD:"
         self.displayScore()
 
         puts "***END OF ROUND***"
