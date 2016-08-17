@@ -3,7 +3,8 @@
 ###
 
 class Card
-    # Every card has a value (2-14) and a suit (Hearts, Diamonds, Spades, Clovers)
+    # Every card has a value (2-14), a suit (Hearts, Diamonds, Spades, Clovers)
+    # and a player obj that holds the last player to play it.
     def initialize(value, suit)
         @value = value
         @suit = suit

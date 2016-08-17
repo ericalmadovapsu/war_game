@@ -1,3 +1,8 @@
+###
+# This class represents a traditional, standard deck of 52 american playing cards
+###
+
+
 class Deck
     require_relative 'card'
 

@@ -8,7 +8,7 @@ class Game
     require_relative 'deck'
 
     def initialize(numPlayers)
-        # Important variable - used for determining many things
+        # Holds current number of players in the game
         @numPlayers = numPlayers
         # Game deck - holds ALL cards
         @deck = Deck.new()
@@ -19,11 +19,12 @@ class Game
         end
     end
 
+    # Shuffle game deck
     def shuffleDeck()
         @deck.shuffle()
     end
 
-    # Distribute cards
+    # Distribute cards to all players
     def distributeCards()
         i = 0
         52.times do |j|
@@ -36,6 +37,7 @@ class Game
         end
     end
 
+    # Method responsible for playing an entire turn of 'game of war'
     def playTurn()
         puts "*** START OF ROUND ***"
         # Holds cards in current battle to be compared
@@ -46,8 +48,8 @@ class Game
         puts "Cards played this battle:"
         @players.each do |player|
             card = player.playCard()
-            # If a card cannot be played, the player loses and the entire turn
-            # is rolled back.
+            # If a card cannot be played, the player is removed and the game continues
+            # with the next player
             if !card
                 self.checkForLosers()
                 next
@@ -55,11 +57,9 @@ class Game
                 puts "#{player.name} has played card: "
                 card.displayCard()
             end
-            # Add card to game's version of the played cards
+
             cardsInPlay << card
-            # Add card to "spoils"
             cardsForWinner << card
-            # Add player to card's last pllayed by var
             card.setLastPlayed(player)
         end
 
@@ -73,17 +73,15 @@ class Game
             puts "WARRRRRRRRR!!!!!!!!"
             warSpoilsHash = invokeWar(cardsForWinner)
             if warSpoilsHash
-                puts "Amount of cards WON from WAR BEFORE THE CONCAT: #{cardsForWinner.length}"
                 winningCard = warSpoilsHash["winningCard"]
                 cardsForWinner = warSpoilsHash["spoils"]
-                puts "Amount of cards won from WAR: #{cardsForWinner.length}"
             else
                 # If war returns false, game is over
                 return
             end
         end
         
-        # TESTING - new determination of winner
+        # Determine winner of round based on the last player who played the winner card
         winner = nil
         @players.each do |player|
             if winningCard.getLastPlayedBy.eql?(player.name())
@@ -100,16 +98,19 @@ class Game
 
         self.displayScore()
 
-        # End round
         puts "***END OF ROUND***"
         puts
     end
 
-    # War algorithm
+    # Method responsible for the functionality of a war
+    # Params:
+    #   winnersCards - Cards won in the round so far
+    # Returns:
+    #   winnings - results of the war in a hash
+    #   False - if the game is over
     def invokeWar(winnersCards)
-        # Holds cards in current battle
+        # Holds cards in current battle (resets each war)
         cardsInPlay = []
-        burnCardsInPlay = []
         repeat = true
         round = 1
         puts "Cards played this war:"
@@ -118,8 +119,10 @@ class Game
             # Each player flips over the top card of their deck
             @players.each do |player|
                 burnCard = player.playCard()
+                # If a card can't be played, remove that player and continue on
                 if !burnCard
                     self.checkForLosers()
+                    # If the game is over, the war is over
                     if @numPlayers == 1
                         return false
                     end
@@ -132,6 +135,7 @@ class Game
                     # to spoils if we lose a player
                     winnersCards << burnCard
                     self.checkForLosers()
+                    # If the game is over, the war is over
                     if @numPlayers == 1
                         return false
                     end
@@ -148,8 +152,6 @@ class Game
                 # Add card played to player's cards played list
                 card.setLastPlayed(player)
                 burnCard.setLastPlayed(player)
-
-                puts "Total # of winnings so far: #{winnersCards.length}"
             end
 
             largest = self.findLargest(cardsInPlay)
@@ -160,7 +162,6 @@ class Game
                 repeat = true
                 # Clear our "InPlay" lists if we have to go for another round
                 cardsInPlay.clear()
-                burnCardsInPlay.clear()
                 round += 1
             else
                 repeat = false
@@ -175,7 +176,9 @@ class Game
         return winnings
     end
 
-    # Provides whether your largest in tied with any cards within cards
+    # Provides whether your largest is tied with any cards within cards
+    # Returns:
+    #   true/false - if largest has a dup in cards
     def checkForDup(largest, cards)
         cards.each do |card|
             if (card.getValue == largest.getValue &&
@@ -186,7 +189,9 @@ class Game
         return false
     end
 
-    # Called at the end of the turn
+    # Checks for losers and removes them from the game
+    # Returns:
+    #   true/false - true if a player was removed, false otherwise
     def checkForLosers()
         @players.each do |player|
             # Remove players with no cards left from the game
@@ -216,7 +221,7 @@ class Game
         end
     end
 
-    # Remove player from the game
+    # Remove player from the game and decrement the number of players
     def removePlayer(to_remove)
         # Search for this player and remove them from the game list
         @players.delete(to_remove)

@@ -17,6 +17,7 @@ class Player
         puts
     end
 
+    # Displays current player's score, which is how many cards they have left
     def displayScore()
         puts "#{name} has #{@hand.length} cards in their deck"
     end
