@@ -1,5 +1,8 @@
 # war_game
-War game sample
+War game
+
+ABOUT:
+I wanted to learn Ruby so I decided to write a little game to help myself learn it!
 
 To run game:
 
